@@ -4,10 +4,19 @@ import { Container, ProductTable, Total } from './styles'
 import { connect } from 'react-redux'
 import * as CartActions from '../../store/modules/cart/actions'
 import { bindActionCreators } from 'redux'
+import { formatPrice } from '../../util/format'
 
 
+function Cart({cart, removeFromCart, updateAmount, total}) {
 
-function Cart({cart, removeFromCart}) {
+  function increment(product) {
+    updateAmount(product.id, product.amount + 1)
+  }
+
+  function decrement(product){
+    updateAmount(product.id, product.amount - 1)
+  }
+
   return (
     <Container>
       <ProductTable>
@@ -32,17 +41,17 @@ function Cart({cart, removeFromCart}) {
             </td>
             <td>
               <div>
-              <button>
+              <button type='button' onClick={() => decrement(product)}>
                 <MdRemoveCircleOutline size={20} color="#7159c1" />
-              </button>
+              </button >
               <input type="number" readOnly value={product.amount}/>
-              <button>
+              <button type='button' onClick={() => increment(product)} >
                 <MdAddCircleOutline size={20} color="#7159c1" />
               </button>
               </div>
               </td>
               <td>
-                <strong>R$ 245,54</strong>
+                <strong>{product.subTotal}</strong>
               </td>
               <td>
                 <button type="button" onClick={()=>
@@ -61,14 +70,20 @@ function Cart({cart, removeFromCart}) {
         </button>
         <Total>
             <span> TOTAL </span>
-            <strong> R$ 5000,00 </strong>
+            <strong> {total} </strong>
         </Total>
       </footer>
     </Container>
   );
 }
 const mapStateToProps = state => ({
-  cart: state.cart
+  cart: state.cart.map(product => ({
+    ...product,
+    subTotal: formatPrice(product.price * product.amount)
+  })),
+  total: formatPrice( state.cart.reduce((total, product) => {
+    return total + product.price * product.amount
+  }, 0))
 });
 
 const mapDispatchToProps = dispatch =>
