@@ -28,6 +28,7 @@ module.exports = {
       'warn', {extensions:['.jsx', '.js']}
     ],
     'import/prefer-export-default': 'off',
-    'no-console': ['error', { allow:['tron']}]
+    'no-console': ['error', { allow:['tron']}],
+    'no-param-reassign' : 'off',
   }
 }
