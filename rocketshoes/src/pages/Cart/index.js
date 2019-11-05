@@ -6,7 +6,6 @@ import * as CartActions from '../../store/modules/cart/actions'
 import { bindActionCreators } from 'redux'
 import { formatPrice } from '../../util/format'
 
-
 function Cart({cart, removeFromCart, updateAmount, total}) {
 
   function increment(product) {
